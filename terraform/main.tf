@@ -24,6 +24,10 @@ resource "fastly_service_v1" "my-fastly-service" {
     comment = "Altitude 2017 workshop domain"
   }
 
+  domain {
+    name = "${var.fastly_name}-2.fastly-altitude-2017.com" # <--
+  }
+
   backend {
     address               = "storage.googleapis.com"
     ssl_hostname          = "altitude-nyc-abcd-2017-stage.storage.googleapis.com"
