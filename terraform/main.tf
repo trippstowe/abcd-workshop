@@ -10,7 +10,7 @@ variable "fastly_name" {
   type = "string"
 }
 variable "fastly_domain"{}
-variable "fastly_backend_bucket"
+variable "fastly_backend_bucket"{}
 
 provider "fastly" {
   api_key = "${var.fastly_api_token}"
@@ -46,5 +46,5 @@ resource "fastly_service_v1" "my-fastly-service" {
 }
 
 output "address" {
-  value = "${var.fastly_name}.fastly-altitude-2017.com.global.prod.fastly.net/index.html"
+  value = "${var.fastly_name}.${var.fastly_domain}/index.html"
 }
