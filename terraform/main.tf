@@ -9,6 +9,8 @@ variable "fastly_api_token" {
 variable "fastly_name" {
   type = "string"
 }
+variable "fastly_domain"{}
+variable "fastly_backend_bucket"
 
 provider "fastly" {
   api_key = "${var.fastly_api_token}"
@@ -20,18 +22,14 @@ resource "fastly_service_v1" "my-fastly-service" {
   force_destroy = true
 
   domain {
-    name    = "${var.fastly_name}.fastly-altitude-2017.com"
+    name    = "${var.fastly_domain}"
     comment = "Altitude 2017 workshop domain"
-  }
-
-  domain {
-    name = "${var.fastly_name}-2.fastly-altitude-2017.com" # <--
   }
 
   backend {
     address               = "storage.googleapis.com"
-    ssl_hostname          = "altitude-nyc-abcd-2017-stage.storage.googleapis.com"
-    name                  = "altitude-nyc-abcd-2017-stage"
+    ssl_hostname          = "${var.fastly_backend_bucket}.storage.googleapis.com"
+    name                  = "${var.fastly_backend_bucket}"
     port                  = 443
     first_byte_timeout    = 3000
     max_conn              = 200
@@ -43,7 +41,7 @@ resource "fastly_service_v1" "my-fastly-service" {
     action      = "set"
     type        = "request"
     destination = "http.Host"
-    source      = "\"altitude-nyc-abcd-2017-stage.storage.googleapis.com\""
+    source      = "\"${var.fastly_backend_bucket}.storage.googleapis.com\""
   }
 }
 
